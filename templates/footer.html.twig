@@ -1,0 +1,29 @@
+<footer class=" bg-[#007978] text-white ">
+    <div class='flex gap-6 p-6'>
+        <a href="{{ path('app_post') }}">
+            <img src="{{asset('blog.svg')}}" class="max-h-24" alt="" />
+        </a>
+
+        <ul class="flex flex-col justify-center gap-3">
+            <li>
+                <a href="{{ path('app_home') }}" {% if app.request.get('_route') == 'app_home' %} class="text-white underline" {% endif %}>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_about') }}" {% if app.request.get('_route') == 'app_about' %} class="text-white underline" {% endif %}>
+                    About
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('app_contact') }}" {% if app.request.get('_route') == 'app_contact' %} class="text-white underline" {% endif %}>
+                    Contact
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="bg-[#012B3A] p-1 text-center">
+        Copy Right @ 2024
+    </div>
+
+</footer>

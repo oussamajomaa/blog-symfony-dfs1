@@ -1,0 +1,122 @@
+<!-- JavaScript pour le toggle du menu -->
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const menuToggle = document.getElementById('menu-toggle');
+		const menu = document.getElementById('menu');
+		const burgerIcon = document.getElementById('menu-burger');
+		const closeIcon = document.getElementById('menu-close');
+
+		menuToggle.addEventListener('click', function () { // Toggle l'affichage du menu
+			menu.classList.toggle('hidden');
+
+			// Basculer entre les icônes burger et "X"
+			burgerIcon.classList.toggle('hidden');
+			closeIcon.classList.toggle('hidden');
+		});
+	});
+</script>
+
+
+
+<div class="flex justify-between mx-5 items-center">
+	<div class="flex justify-center gap-5 p-3">
+		<a href=""><i class="fa-brands text-2xl fa-facebook"></i></a>
+		<a href=""><i class="fa-brands text-2xl fa-x-twitter"></i></a>
+		<a href=""><i class="fa-brands text-2xl fa-youtube"></i></a>
+	</div>
+	{% if not app.user %}
+	<a href="{{path('app_login')}}" class="btn btn-outline btn-sm">Login <i class="fa-solid fa-user"></i></a>
+	{% endif %}
+	{% if app.user %}
+	<span class="text-white mr-2 font-bold">{{app.user.roles[0]}}</span>
+	<a href="{{path('app_logout')}}" class="btn btn-outline btn-sm">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
+	{% endif %}
+</div>
+<div
+	class="sticky top-0 z-50 flex items-center justify-between flex-wrap p-3 bg-[#007978] backdrop-blur-lg bg-opacity-90">
+	<div class="flex items-center flex-shrink-0 mr-6 gap-6">
+		<a href="{{ path('app_post') }}">
+			<img src="/blog.svg" class="w-100 h-10 mr-2" alt="Logo" />
+		</a>
+	</div>
+
+	<!-- Bouton Menu Burger (visible uniquement en mode mobile) -->
+	<div class="lg:hidden flex justify-end">
+		<button id="menu-toggle" class="flex items-center px-3 py-2 rounded text-white focus:outline-none">
+			<!-- Icône Burger -->
+			<svg id="menu-burger" class="block w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+				viewbox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+			</svg>
+			<!-- Icône "X" pour fermer le menu (cachée par défaut) -->
+			<svg id="menu-close" class="hidden w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+				viewbox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+			</svg>
+		</button>
+	</div>
+
+	<!-- Menu principal (visible sur grands écrans, caché par défaut sur mobile) -->
+	<div id="menu"
+		class="m-auto  font-mono text-xl w-full hidden flex flex-col lg:flex lg:flex-row lg:items-center lg:w-auto text-white lg:gap-6 max-lg:mt-6">
+		<a class="{% if app.request.get('_route')=='app_post' %}text-yellow-500 {% endif %} hover:bg-gray-700 focus:outline-none rounded-md  shadow-sm px-4 py-2" 
+			href="{{ path('app_post') }}">
+			Home
+		</a>
+		<a <a class="{% if app.request.get('_route')=='app_about' %}text-yellow-500 {% endif %} hover:bg-gray-700 focus:outline-none rounded-md  shadow-sm px-4 py-2" 
+			href="{{ path('app_about') }}">
+			About
+		</a>
+		<!-- Inclusion des catégories dans le menu -->
+		<!-- Liste déroulante des catégories -->
+		<div class="relative inline-block text-left">
+			<button
+				class="{% if app.request.get('_route')=='app_post_categorie' %}text-yellow-500 {% endif %} inline-flex justify-center w-full rounded-md  shadow-sm px-4 py-2   text-white hover:bg-gray-700 focus:outline-none "
+				id="menu-button" aria-expanded="true" aria-haspopup="true">
+				Catégories
+				
+				<svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+					stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+				</svg>
+			</button>
+
+			<!-- Dropdown menu -->
+			<div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md  bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden group-hover:block"
+				id="dropdown-menu">
+				<div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+					{% if app.session.get('categories') %}
+					{% for categorie in app.session.get('categories') %}
+					<a href="{{path('app_post_categorie',{'id':categorie.id})}}"
+						class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+						{{ categorie.name }}
+					</a>
+					{% endfor %}
+					{% else %}
+					<p class="px-4 py-2 text-sm text-gray-700">No categories found</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<a class="{% if app.request.get('_route')=='app_contact' %}text-yellow-500 {% endif %} hover:bg-gray-700 focus:outline-none rounded-md  shadow-sm px-4 py-2" 
+			href="{{ path('app_contact') }}">
+			Contact
+		</a>
+
+
+	</div>
+
+</div>
+</nav>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const menuButton = document.getElementById('menu-button');
+		const dropdownMenu = document.getElementById('dropdown-menu');
+
+		menuButton.addEventListener('click', function () {
+			dropdownMenu.classList.toggle('hidden');
+		});
+	});
+</script>

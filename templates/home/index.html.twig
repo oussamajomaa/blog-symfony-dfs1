@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+{% block title %}
+    Home page
+{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-3xl font-bold text-center p-5 m-5 ">
+        Home page
+    </h1>
+    <div class="flex flex-wrap gap-2 mb-2">
+        {# {% for post in posts %}
+            <div class="card bg-base-100 shadow-xl w-[30%]">
+                <div class="card-body">
+                    <h2 class="card-title">
+                    {{ post.title }}
+                    </h2>
+                    <p>
+                        {{ post.content }}
+                    </p>
+                    <p>
+                        {{ post.createdAt|date('Y:m:d') }}
+                    </p>
+                    <div class="card-actions justify-end">
+                        <button class="btn btn-primary">
+                            detail
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+    
+        {% endfor %} #}
+    </div>
+
+{% endblock %}
