@@ -1,0 +1,19 @@
+<div class="w-[240px] h-screen bg-[#198685] fixed flex flex-col gap-5 p-5">
+    <h1 class="text-3xl font-extrabold text-center text-white mb-9">Admin Panel</h1>
+    <a 
+        href="{{path('admin_dashboard')}}" 
+        class="{% if app.request.get('_route')=='admin_dashboard' %} btn btn-error text-white 
+                {% else %} btn btn-dark 
+                 {% endif %} ">Articles</a>
+    <a 
+        href="{{path('app_user')}}" 
+        class="{% if app.request.get('_route') starts with 'app_user' or app.request.get('_route') == 'app_register'  %} btn btn-error text-white 
+            {% else %} btn btn-dark 
+             {% endif %}">Users</a>
+    <a 
+        href="{{path('app_category')}}" 
+        class="{% if app.request.get('_route') starts with 'app_category' %} btn btn-error text-white 
+        {% else %} btn btn-dark 
+         {% endif %}">Categories</a>
+    <a href="{{path('app_logout')}}" class="btn btn-dark">Logout</a>
+</div>

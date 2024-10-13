@@ -20,7 +20,8 @@
 				<a href="{{path('app_post_liked',{'id':post.id})}}"><i
 						class="fa-regular fa-thumbs-up text-blue-500 text-right text-2xl"></i> {{post.liked}}</a>
 				{% endif %}
-				<h2>{{post.created_at|date('d M Y')}}</h2>
+				<h2>{{post.createdAt|date('d M Y')}}</h2>
+				<a href="{{path('app_post_categorie',{'id':post.category.id})}}" class="badge badge-outline">{{post.category.name}}</a>
 			</div>
 			<div class="card-actions justify-end">
 				<a href="{{path('app_post_show', {'id':post.id})}}" class="btn btn-primary btn-sm">Détail</a>

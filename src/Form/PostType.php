@@ -7,6 +7,7 @@ use App\Entity\Post;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -41,12 +42,22 @@ class PostType extends AbstractType
                 ],
                 'label' => false
             ])
-            ->add('image',  TextType::class, [
+            // ->add('image',  TextType::class, [
+            //     'attr' => [
+            //         'class' => 'input input-bordered input-primary w-full  mb-3',
+            //         'placeholder' => "Saisir l'url de l'image"
+            //     ],
+            //     'label' => false,
+            //     'required' => false
+            // ])
+
+            ->add('imageFile', FileType::class, [
                 'attr' => [
-                    'class' => 'input input-bordered input-primary w-full  mb-3',
-                    'placeholder' => "Saisir l'url de l'image"
+                    'class' => 'file-input file-input-bordered file-input-primary w-full mb-3',
+                    'placeholder' => "Télécharger une image"
                 ],
                 'label' => false,
+                'mapped' => false, // Cela signifie que ce champ ne sera pas mappé à l'entité directement
                 'required' => false
             ])
 

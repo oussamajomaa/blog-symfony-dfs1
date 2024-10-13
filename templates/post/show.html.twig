@@ -2,7 +2,11 @@
 {% block title %}onn post{% endblock %}
 {% block body %}
 <div class="flex flex-col gap-4 w-2/3 m-auto">
-    <img src={{article.image}} alt="">
+    {% if article.image starts with 'https://' %}
+			<img src="{{ article.image }}" alt="Image par défaut" class="img-fluid">
+			{% else %}
+			<img src="{{ asset('uploads/' ~ article.image) }}" alt="{{ article.title }}" class="img-fluid">
+			{% endif %}
     <h2 class="text-3xl font-bold">{{article.title}}</h2>
     <p class="text-justify">{{article.content}}</p>
     <a href="{{path('app_post')}}" class="btn btn-primary btn-sm">Retourner</a>

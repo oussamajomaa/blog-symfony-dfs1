@@ -3,8 +3,15 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<div class=" h-[calc(100vh-336px)] flex justify-center items-center">
-    
+{% for label, messages in app.flashes %}
+    <div class="alert alert-{{ label }} mb-3">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endfor %}
+<div class=" h-[calc(100vh-340px)] flex justify-center items-center">
+   
     <form method="post" class="w-[500px] p-10  rounded shadow flex flex-col gap-5 ">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

@@ -1,22 +1,28 @@
-{% extends 'base.html.twig' %}
+{% extends template %}
+
 
 {% block title %}Register{% endblock %}
 
 {% block body %}
-<div class=" h-[calc(100vh-336px)] flex justify-center items-center">
-    
-    
-    {{ form_errors(registrationForm) }}
-    
-    {{ form_start(registrationForm,{'attr':{'class':'flex flex-col gap-5 p-10 shadow-xl rounded w-[500px]'}}) }}
-    <h1 class="text-center text-2xl font-bold">Inscription</h1>
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-        }) }}
-        {# {{ form_row(registrationForm.agreeTerms) }} #}
+<div class=" h-[calc(100vh-340px)] flex justify-center items-center">
 
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm, {'attr': {'class': 'flex flex-col gap-5 p-10 shadow-xl rounded w-[500px]'}}) }}
+    <h1 class="text-center text-2xl font-bold">Inscription</h1>
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword) }}
+    {% if isAdmin %}
+    <select name="role" id="" class="select select-bordered select-info w-full">
+        <option disabled selected>Select a role</option>
+        <option value="ROLE_ADMIN">ADMIN</option>
+        <option value="ROLE_USER">USER</option>
+    </select>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">S'inscrire</button> {# Le bouton doit venir après tous les champs #}
     {{ form_end(registrationForm) }}
+
 </div>
 
 {% endblock %}
