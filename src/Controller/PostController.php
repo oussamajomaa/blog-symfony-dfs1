@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 class PostController extends AbstractController
 {
@@ -29,6 +31,8 @@ class PostController extends AbstractController
         PostRepository $postRepository,
         CategoryRepository $categoryRepositoryn,
         SessionInterface $session,
+        PaginatorInterface $paginator,
+        Request $request
     ): Response {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_dashboard');
@@ -37,8 +41,15 @@ class PostController extends AbstractController
         $session->set('categories', $categories);
         $posts = $postRepository->findBy([], ['createdAt' => 'desc']);
 
+        // Paginer les résultats
+        $pagination = $paginator->paginate(
+            $posts, /* tableau des résultats */
+            $request->query->getInt('page', 1), /* Numéro de page */
+            6 /* Limite d'éléments par page */
+        );
+
         return $this->render('post/index.html.twig', [
-            'posts' => $posts
+            'pagination' => $pagination
         ]);
     }
 
@@ -158,7 +169,7 @@ class PostController extends AbstractController
                 $em->flush();
                 $this->addFlash('warning', 'Un article a été supprimé');
             } else {
-                $this->addFlash('error',"Vous n'avez pas la permission");
+                $this->addFlash('error', "Vous n'avez pas la permission");
             }
         }
 
@@ -183,7 +194,7 @@ class PostController extends AbstractController
     {
         // $sql = "SELECT * FROM post WHERE category_id = ?";
         // $posts = $connection->fetchAllAssociative($sql, [$id]);
-        $posts = $postRepository->findBy(['category'=>$category]);
+        $posts = $postRepository->findBy(['category' => $category]);
         // $posts = $postRepository->findByCategory($id);
         return $this->render('post/category.html.twig', [
             'posts' => $posts

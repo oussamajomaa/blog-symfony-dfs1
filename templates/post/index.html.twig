@@ -3,16 +3,46 @@
 {% block title %}Post
 {% endblock %}
 
+{% block stylesheets %}
+<style>
+	.pagination {
+
+		margin: 10px;
+		display: flex;
+		gap: 10px;
+		justify-items: center;
+		justify-content: center;
+		padding: 10px;
+		
+	}
+
+	/* .pagination .page-item .page-link {
+		font-size: 12px !important;
+	} */
+
+	.pagination span {
+		padding: 5px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	.pagination .current {
+		background-color: blue;
+		color: white;
+		border-radius: 5px;
+
+	}
+</style>
+{% endblock %}
 {% block body %}
 {% for label, messages in app.flashes %}
-    <div class="alert alert-{{ label }} mb-3">
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    </div>
+<div class="alert alert-{{ label }} mb-3">
+	{% for message in messages %}
+	{{ message }}
+	{% endfor %}
+</div>
 {% endfor %}
 <div class="flex flex-wrap gap-5 mb-5 justify-around">
-	{% for post in posts %}
+	{% for post in pagination %}
 	<div class="card card-compact bg-base-100 w-1/4 shadow-xl max-md:w-full max-lg:w-1/3">
 		<figure>
 			{% if post.image starts with 'https://' %}
@@ -32,11 +62,12 @@
 						class="fa-regular fa-thumbs-up text-blue-500 text-right text-2xl"></i> {{post.liked}}</a>
 				{% endif %}
 				<h2>{{post.createdAT|date('d M Y')}}</h2>
-				<a href="{{path('app_post_categorie',{'id':post.category.id})}}" class="badge badge-outline">{{post.category.name}}</a>
+				<a href="{{path('app_post_categorie',{'id':post.category.id})}}"
+					class="badge badge-outline">{{post.category.name}}</a>
 			</div>
 			<div class="card-actions justify-end">
 				<a href="{{path('app_post_show', {'id':post.id})}}" class="btn btn-primary btn-sm">Show</a>
-				{% if app.user  and app.user.email == post.user.email %}
+				{% if app.user and app.user.email == post.user.email %}
 				<a href="{{path('app_post_edit', {'id':post.id})}}" class="btn btn-success btn-sm text-white">Edit</a>
 				<a href="{{path('app_post_delete', {'id':post.id})}}" class="btn btn-error btn-sm text-white">Delete</a>
 				{% endif %}
@@ -45,6 +76,12 @@
 	</div>
 	{% endfor %}
 </div>
+<div class="navigation">
+	{{ knp_pagination_render(pagination) }}
+</div>
+
+
+
 
 
 {% endblock %}
