@@ -1,12 +1,24 @@
+{# templates/contact/index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Contact
-{% endblock %}
-
 {% block body %}
-    <h1 class="text-3xl font-bold text-center p-5 m-5 ">
-        Contact page
-    </h1>
+    <h1 class="text-3xl font-bold">Contactez-nous</h1>
 
+    {% for label, messages in app.flashes %}
+        <div class="alert alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+        {# {{ form_row(form.name) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.message) }} #}
+
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    {{ form_end(form) }}
 {% endblock %}

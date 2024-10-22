@@ -64,15 +64,17 @@ class PostController extends AbstractController
             return $this->redirectToRoute('app_login'); // Redirection vers la page de connexion
         }
         $post = new Post();
+        $post->setUser($user);
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+           
             $imageFile = $form->get('imageFile')->getData();
-
+            // dd($imageFile);
             if ($imageFile) {
                 $newFilename = uniqid() . '.' . $imageFile->guessExtension();
-
+                // dd($imageFile);
                 try {
                     $imageFile->move(
                         $this->uploadsDir,
@@ -116,9 +118,10 @@ class PostController extends AbstractController
         // Création et traitement du formulaire
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile = $form->get('imageFile')->getData();
 
+            $imageFile = $form->get('imageFile')->getData();
             if ($imageFile) {
                 // Stocker le nom de l'ancienne image
                 $oldImage = $post->getImage();
@@ -141,8 +144,13 @@ class PostController extends AbstractController
                 $post->setImage('https://placehold.co/600x400/orange/white');
             }
 
+           
+
             $em->persist($post);
             $em->flush();
+
+            $this->addFlash('cle1', "L'article " . $post->getTitle() . " a été modifié");
+
             return $this->redirectToRoute('app_post');
         }
         return $this->render('post/edit.html.twig', [

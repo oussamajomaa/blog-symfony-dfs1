@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Tag{% endblock %}
+
+{% block body %}
+    <h1>Edit Tag</h1>
+    {{ include('tag/_form.html.twig', {'button_label': 'Update'}) }}
+<div class="flex justify-end gap-6 items-center">
+
+
+    <a href="{{ path('app_tag_index') }}" class="text-blue-400">back</a>
+    {{ include('tag/_delete_form.html.twig') }}
+</div>
+
+{% endblock %}

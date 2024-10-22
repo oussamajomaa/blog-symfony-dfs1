@@ -1,21 +1,37 @@
 {% extends "base.html.twig" %}
 {% block title %}Edit post{% endblock %}
+
 {% block body %}
 <div class="flex flex-col gap-4 w-1/2 m-auto">
     {{form_start(form)}}
     <div class="mb-4">
         {% if post.image %}
-            <div class="mb-2">
-                <img src="{{ post.image starts with 'http' ? post.image : asset('uploads/' ~ post.image) }}" alt="{{ post.title }}" class="w-32 h-32 object-cover">
-            </div>
+        <div class="mb-2">
+            <img src="{{ post.image starts with 'http' ? post.image : asset('uploads/' ~ post.image) }}"
+                alt="{{ post.title }}" class="w-32 h-32 object-cover">
+        </div>
         {% endif %}
     </div>
-    <div class="">
+    <div class="mb-3">
         {{form_widget(form)}}
-        <button type="submit" class="btn btn-primary">Edit</button>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary mt-3">Edit</button>
     </div>
     {{form_end(form)}}
-    
+
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    // Initialiser Select2 sur le champ tags
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Sélectionner des tags",
+            allowClear: true
+        });
+    });
+</script>
 {% endblock %}

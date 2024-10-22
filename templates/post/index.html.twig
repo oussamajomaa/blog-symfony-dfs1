@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block stylesheets %}
+
 <style>
 	.pagination {
 
@@ -35,9 +36,12 @@
 {% endblock %}
 {% block body %}
 {% for label, messages in app.flashes %}
-<div class="alert alert-{{ label }} mb-3">
+<div class="alert alert-{{ label }}  text-center mb-3">
 	{% for message in messages %}
-	{{ message }}
+	<div>
+
+		{{ message }}
+	</div>
 	{% endfor %}
 </div>
 {% endfor %}
@@ -64,7 +68,13 @@
 				<h2>{{post.createdAT|date('d M Y')}}</h2>
 				<a href="{{path('app_post_categorie',{'id':post.category.id})}}"
 					class="badge badge-outline">{{post.category.name}}</a>
-			</div>
+				</div>
+				<div>
+					{% for tag in post.tag %}
+						<span class="m-1 badge badge-neutral">{{tag}}</span>
+					{% endfor %}
+
+				</div>
 			<div class="card-actions justify-end">
 				<a href="{{path('app_post_show', {'id':post.id})}}" class="btn btn-primary btn-sm">Show</a>
 				{% if app.user and app.user.email == post.user.email %}

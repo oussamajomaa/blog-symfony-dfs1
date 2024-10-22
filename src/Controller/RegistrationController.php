@@ -18,11 +18,11 @@ use Symfony\Component\Uid\Uuid;
 
 class RegistrationController extends AbstractController
 {
-    private $emailService;
-    public function __construct(EmailService $emailService)
-    {
-        $this->emailService = $emailService;
-    }
+    // private $emailService;
+    // public function __construct(EmailService $emailService)
+    // {
+    //     $this->emailService = $emailService;
+    // }
 
     #[Route('/register', name: 'app_register')]
     public function register(
@@ -70,7 +70,8 @@ class RegistrationController extends AbstractController
             ], UrlGeneratorInterface::ABSOLUTE_URL);
 
             // Envoyer l'email avec le lien de confirmation
-            $this->emailService->sendEmail(
+            $emailService->sendEmail(
+                $_ENV['EMAIL_SENDER'],
                 $user->getEmail(),
                 'Veuillez confirmer votre inscription',
                 'Merci de vous être inscrit. 
@@ -78,8 +79,9 @@ class RegistrationController extends AbstractController
                 <a href="' . $confirmationLink . '">Confirmer mon compte</a>'
             );
 
+            $this->addFlash('success','Un lien de confirmation a été envoyé Veuillez confirmer votre inscription');
             // Rediriger l'utilisateur après l'inscription
-            return $this->redirectToRoute('app_post');
+            return $this->redirectToRoute('app_login');
         }
 
         // Choisir le template de base en fonction du rôle

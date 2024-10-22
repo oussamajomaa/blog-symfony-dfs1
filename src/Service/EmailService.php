@@ -14,10 +14,11 @@ class EmailService
         $this->mailer = $mailer;
     }
 
-    public function sendEmail(string $to, string $subject, string $content): void
+    public function sendEmail(string $from, string $to, string $subject, string $content): void
     {
+        $from = $from ?? $_ENV['EMAIL_SENDER'];
         $email = (new Email())
-            ->from($_ENV['EMAIL_SENDER'])
+            ->from($from)
             ->to($to)
             ->subject($subject)
             ->text($content)
@@ -26,3 +27,10 @@ class EmailService
         $this->mailer->send($email);
     }
 }
+
+
+
+
+
+// php bin/console messenger:consume async --time-limit=3600
+
