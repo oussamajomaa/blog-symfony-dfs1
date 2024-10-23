@@ -40,7 +40,6 @@ class PostController extends AbstractController
         $categories = $categoryRepositoryn->findAll();
         $session->set('categories', $categories);
         $posts = $postRepository->findBy([], ['createdAt' => 'desc']);
-
         // Paginer les résultats
         $pagination = $paginator->paginate(
             $posts, /* tableau des résultats */
