@@ -1,0 +1,26 @@
+.pagination {
+
+    margin: 10px;
+    display: flex;
+    gap: 10px;
+    justify-items: center;
+    justify-content: center;
+    padding: 10px;
+    
+}
+
+/* .pagination .page-item .page-link {
+    font-size: 12px !important;
+} */
+
+.pagination span {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.pagination .current {
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
+
+}

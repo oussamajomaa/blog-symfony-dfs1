@@ -50,5 +50,15 @@ class PostRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
+
+    public function search($word)
+    {
+        return $this->createQueryBuilder('p')
+        ->where('p.title LIKE :search')
+        ->orWhere('p.content LIKE :search')
+        ->setParameter('search', '%' . $word . '%')
+        ->getQuery()
+        ->getResult();
+    }
    
 }

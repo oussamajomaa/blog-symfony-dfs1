@@ -3,48 +3,20 @@
 {% block title %}Post
 {% endblock %}
 
-{% block stylesheets %}
-
-<style>
-	.pagination {
-
-		margin: 10px;
-		display: flex;
-		gap: 10px;
-		justify-items: center;
-		justify-content: center;
-		padding: 10px;
-		
-	}
-
-	/* .pagination .page-item .page-link {
-		font-size: 12px !important;
-	} */
-
-	.pagination span {
-		padding: 5px;
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-	.pagination .current {
-		background-color: blue;
-		color: white;
-		border-radius: 5px;
-
-	}
-</style>
-{% endblock %}
 {% block body %}
-{% for label, messages in app.flashes %}
-<div class="alert alert-{{ label }}  text-center mb-3">
-	{% for message in messages %}
-	<div>
 
-		{{ message }}
+<div class="mb-3 flex justify-end">
+	{{form_start(form)}}
+	<div class="flex gap-1 relative">
+		<button class="btn btn-primary">Search</button>
+		{% if search %}
+        <a href="{{ path('app_post') }}" class="btn btn-sm btn-circle absolute right-1 top-2">x</a> 
+		{% endif %}
+		{{form_row(form.search, { 'attr': { 'value': search } })}}
 	</div>
-	{% endfor %}
+	{{form_end(form)}}
 </div>
-{% endfor %}
+
 <div class="flex flex-wrap gap-5 mb-5 justify-around">
 	{% for post in pagination %}
 	<div class="card card-compact bg-base-100 w-1/4 shadow-xl max-md:w-full max-lg:w-1/3">
@@ -65,7 +37,7 @@
 				<a href="{{path('app_post_liked',{'id':post.id})}}"><i
 						class="fa-regular fa-thumbs-up text-blue-500 text-right text-2xl"></i> {{post.liked}}</a>
 				{% endif %}
-				<h2>{{post.createdAT|date('d M Y')}}</h2>
+				<h2>{{post.createdat|date('d M Y')}}</h2>
 				<a href="{{path('app_post_categorie',{'id':post.category.id})}}"
 					class="badge badge-outline">{{post.category.name}}</a>
 				</div>
@@ -87,7 +59,7 @@
 	{% endfor %}
 </div>
 <div class="navigation">
-	{{ knp_pagination_render(pagination) }}
+	{{ knp_pagination_render(pagination, null, { 'search': search }) }}
 </div>
 
 

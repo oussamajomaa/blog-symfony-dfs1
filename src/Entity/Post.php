@@ -23,7 +23,7 @@ class Post
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeInterface $createdat = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -82,12 +82,12 @@ class Post
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->createdAt;
+        return $this->createdat;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    public function setCreatedat(\DateTimeInterface $createdat): static
     {
-        $this->createdAt = $createdAt;
+        $this->createdat = $createdat;
 
         return $this;
     }

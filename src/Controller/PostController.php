@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Form\SearchType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
 use Doctrine\DBAL\Connection;
@@ -26,31 +27,81 @@ class PostController extends AbstractController
         $this->uploadsDir = $uploadsDir;
     }
 
-    #[Route('/', name: 'app_post')]
+    #[Route('/',name:'app_')]
+    public function app()
+    {
+        return $this->redirectToRoute('app_post');
+    }
+
+    
+    #[Route('/post/{search}', name: 'app_post', defaults: ['search' => null])]
     public function index(
         PostRepository $postRepository,
         CategoryRepository $categoryRepositoryn,
         SessionInterface $session,
         PaginatorInterface $paginator,
-        Request $request
+        Request $request,
+        ?string $search
+
     ): Response {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_dashboard');
         }
+
         $categories = $categoryRepositoryn->findAll();
         $session->set('categories', $categories);
-        $posts = $postRepository->findBy([], ['createdAt' => 'desc']);
+
+        $form  = $this->createForm(SearchType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+        }
+    
+        if ($search) {
+            $posts = $postRepository->search($search);
+        } else {
+            $posts = $postRepository->findBy([], ['createdat' => 'desc']);
+        }
+
         // Paginer les résultats
         $pagination = $paginator->paginate(
             $posts, /* tableau des résultats */
             $request->query->getInt('page', 1), /* Numéro de page */
-            6 /* Limite d'éléments par page */
+            9 /* Limite d'éléments par page */
         );
 
         return $this->render('post/index.html.twig', [
+            'pagination' => $pagination,
+            'form' => $form->createView(),
+            'search' => $search
+        ]);
+    }
+
+    #[Route('/post/categorie/{id}', name: 'app_post_categorie')]
+    public function post_categorie(
+        Category $category, 
+        PostRepository $postRepository, 
+        Connection $connection,
+        PaginatorInterface $paginator,
+        Request $request,
+        )
+    {
+        // $sql = "SELECT * FROM post WHERE category_id = ?";
+        // $posts = $connection->fetchAllAssociative($sql, [$id]);
+        $posts = $postRepository->findBy(['category' => $category]);
+        // Paginer les résultats
+        $pagination = $paginator->paginate(
+            $posts, /* tableau des résultats */
+            $request->query->getInt('page', 1), /* Numéro de page */
+            9 /* Limite d'éléments par page */
+        );
+        // $posts = $postRepository->findByCategory($id);
+        return $this->render('post/category.html.twig', [
             'pagination' => $pagination
         ]);
     }
+
+   
 
     #[Route('/post/new', name: 'app_post_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
@@ -68,7 +119,7 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-           
+
             $imageFile = $form->get('imageFile')->getData();
             // dd($imageFile);
             if ($imageFile) {
@@ -117,7 +168,7 @@ class PostController extends AbstractController
         // Création et traitement du formulaire
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $imageFile = $form->get('imageFile')->getData();
@@ -143,7 +194,7 @@ class PostController extends AbstractController
                 $post->setImage('https://placehold.co/600x400/orange/white');
             }
 
-           
+
 
             $em->persist($post);
             $em->flush();
@@ -194,18 +245,6 @@ class PostController extends AbstractController
         $em->persist($post);
         $em->flush();
         return $this->redirectToRoute('app_post');
-    }
-
-    #[Route('/post/categorie/{id}', name: 'app_post_categorie')]
-    public function post_categorie(Category $category, PostRepository $postRepository, Connection $connection)
-    {
-        // $sql = "SELECT * FROM post WHERE category_id = ?";
-        // $posts = $connection->fetchAllAssociative($sql, [$id]);
-        $posts = $postRepository->findBy(['category' => $category]);
-        // $posts = $postRepository->findByCategory($id);
-        return $this->render('post/category.html.twig', [
-            'posts' => $posts
-        ]);
     }
 
     #[Route('/post/show/{id}', name: 'app_post_show')]
